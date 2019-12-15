@@ -10,7 +10,7 @@ msg:
 	@echo '--- C++11 ---'
 
 main: main.cpp
-	${CXX} ${CXXFLAGS} -O3 -lSDL2 -o $@ $< ${SDL2FLAGS}
+	${CXX} ${CXXFLAGS} -O3 -lSDL2 -lSDL2_ttf -o $@ $< ${SDL2FLAGS}
 
 # small: main.cpp
 # 	${CXX} ${CXXFLAGS} -Os -o main $< ${SDL2FLAGS}
