@@ -14,12 +14,18 @@ int main()
         return EXIT_FAILURE;
     }
 
-    SDL_Window* win = SDL_CreateWindow("Hello World!", 100, 100, 620, 387, SDL_WINDOW_SHOWN);
+    SDL_Window* win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 480, SDL_WINDOW_SHOWN);
+
     if (win == nullptr)
     {
         cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
         return EXIT_FAILURE;
     }
+
+    SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
+
+
+
 
     SDL_Renderer* ren
         = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -28,6 +34,8 @@ int main()
         cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl;
         return EXIT_FAILURE;
     }
+
+
 
     SDL_Surface* bmp = SDL_LoadBMP("grumpy-cat.bmp");
     if (bmp == nullptr)
@@ -53,12 +61,13 @@ int main()
         return EXIT_FAILURE;
     }
 
+
     for (int i = 0; i < 20; i++)
     {
         SDL_RenderClear(ren);
         SDL_RenderCopy(ren, tex, nullptr, nullptr);
         SDL_RenderPresent(ren);
-        SDL_Delay(1000);
+        SDL_Delay(100);
     }
 
     SDL_DestroyTexture(tex);
