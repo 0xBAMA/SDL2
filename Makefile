@@ -10,20 +10,20 @@ msg:
 	@echo '--- C++11 ---'
 
 main: main.cpp
-	${CXX} ${CXXFLAGS} -O3 -o $@ $< ${SDL2FLAGS}
+	${CXX} ${CXXFLAGS} -O3 -lSDL2 -o $@ $< ${SDL2FLAGS}
 
-small: main.cpp
-	${CXX} ${CXXFLAGS} -Os -o main $< ${SDL2FLAGS}
-	-strip main
-	-sstrip main
+# small: main.cpp
+# 	${CXX} ${CXXFLAGS} -Os -o main $< ${SDL2FLAGS}
+# 	-strip main
+# 	-sstrip main
 
-debug: main.cpp
-	${CXX} ${CXXFLAGS} -O0 -g -o main $< ${SDL2FLAGS}
-
-asm: main.asm
-
-main.asm: main.cpp
-	${CXX} ${CFLAGS} -S -o main.asm $< ${SDL2FLAGS}
+# debug: main.cpp
+# 	${CXX} ${CXXFLAGS} -O0 -g -o main $< ${SDL2FLAGS}
+#
+# asm: main.asm
+#
+# main.asm: main.cpp
+# 	${CXX} ${CFLAGS} -S -o main.asm $< ${SDL2FLAGS}
 
 run: msg main
 	time ./main
