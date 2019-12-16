@@ -22,8 +22,8 @@ public:
 
   SDL_Window* win;
   SDL_Renderer* ren;
-  SDL_Surface* bmp;
   SDL_Texture* tex;
+  SDL_Texture* splash;
 
   void handle_keyboard_shit();
   void draw_that_shit();
@@ -45,7 +45,6 @@ game::game()
   //null initialization of all sdl objects - they're all created in main()
   win = NULL;
   ren = NULL;
-  bmp = NULL;
   tex = NULL;
 }
 
@@ -199,79 +198,106 @@ void game::handle_keyboard_shit()
 void game::draw_that_shit()
 {
   SDL_RenderClear(ren); //clear our background
-  SDL_SetRenderDrawColor(ren,45,38,22,SDL_ALPHA_OPAQUE); //set the color you want to draw witk
 
-  SDL_Rect fullscreen;
-  fullscreen.x = 0;
-  fullscreen.y = 0;
-  fullscreen.w = 720;
-  fullscreen.h = 480;
-  //put a base layer of that color down
-  SDL_RenderFillRect(ren, &fullscreen);
-
-  //set the new color to draw with
-  SDL_SetRenderDrawColor(ren,45,45,45,SDL_ALPHA_OPAQUE); //set the color you want to draw with
-
-  //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
-  //rectangles tell SDL where you want to read from/write from -
-
-  //The implication here is that you have the opportunity to define where your pixels are going to show up on the screen, and what shape will they be.
-  //Squashing/stretching can be achieved by changing the shape of that rectangle - look at the random generation of widths/heights to see examples.
-
-  SDL_Rect SrcRect; //where are we taking pixels from?
-  SDL_Rect DestRect;  //the pixels we took from SrcRect?
-
-  //these random number generators give me some ability to randomly place the destination rectangles - you'll see
-  std::random_device rd;
-  std::mt19937 mt(rd());
-  std::uniform_int_distribution<int> xdist(0,619);  //between zero and the width of the image
-  std::uniform_int_distribution<int> sxdist(0,720);  //between zero and the width of the screen
-  std::uniform_int_distribution<int> ydist(0,387);  //between zero and the height of the image
-  std::uniform_int_distribution<int> sydist(0,480);  //between zero and the height of the screen
-  std::uniform_int_distribution<int> wdist(16,128);  //some range of values
-  std::uniform_int_distribution<int> hdist(25,175);  //some range of values
-
-  //image dimensions are 620,387
-  //I'm going to chop that into a 4x4 grid
-
-
-  for(int x = 0; x < 4; x++)
+  if(SDL_GetTicks() < 5000)
   {
-    for(int y = 0; y < 4; y++)
+
+    SDL_Rect SrcRect; //where are we taking pixels from?
+    SDL_Rect DestRect;  //the pixels we took from SrcRect?
+
+    SrcRect.x = 0;
+    SrcRect.y = 0;
+    SrcRect.w = 720;
+    SrcRect.h = 405;
+
+    DestRect.x = 0;
+    DestRect.y = 0;
+    DestRect.w = 720;
+    DestRect.h = 405;
+
+    SDL_RenderCopy(ren, splash, &SrcRect, &DestRect);
+    SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
+
+    SDL_Delay(1200);
+
+  }
+  else
+  {
+
+    SDL_SetRenderDrawColor(ren,45,38,22,SDL_ALPHA_OPAQUE); //set the color you want to draw with
+
+    SDL_Rect fullscreen;
+    fullscreen.x = 0;
+    fullscreen.y = 0;
+    fullscreen.w = 720;
+    fullscreen.h = 480;
+    //put a base layer of that color down
+    SDL_RenderFillRect(ren, &fullscreen);
+
+    //set the new color to draw with
+    SDL_SetRenderDrawColor(ren,45,45,45,SDL_ALPHA_OPAQUE); //set the color you want to draw with
+
+    //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
+    //rectangles tell SDL where you want to read from/write from -
+
+    //The implication here is that you have the opportunity to define where your pixels are going to show up on the screen, and what shape will they be.
+    //Squashing/stretching can be achieved by changing the shape of that rectangle - look at the random generation of widths/heights to see examples.
+
+    SDL_Rect SrcRect; //where are we taking pixels from?
+    SDL_Rect DestRect;  //the pixels we took from SrcRect?
+
+    //these random number generators give me some ability to randomly place the destination rectangles - you'll see
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> xdist(0,619);  //between zero and the width of the image
+    std::uniform_int_distribution<int> sxdist(0,720);  //between zero and the width of the screen
+    std::uniform_int_distribution<int> ydist(0,387);  //between zero and the height of the image
+    std::uniform_int_distribution<int> sydist(0,480);  //between zero and the height of the screen
+    std::uniform_int_distribution<int> wdist(16,128);  //some range of values
+    std::uniform_int_distribution<int> hdist(25,175);  //some range of values
+
+    //image dimensions are 620,387
+    //I'm going to chop that into a 4x4 grid
+
+
+    for(int x = 0; x < 4; x++)
     {
-      SrcRect.x = x*(620/4);    //here's some math to get x
-      SrcRect.y = y*(387/4);   //here's some math to get y
-      SrcRect.w = (620/4);    //width is just distance between two samples
-      SrcRect.h = (387/4);   //similar situation for height
-
-      if(aligned)
-      { //'shrunk in' version of the cat face - this was kind of trial and error
-        DestRect.x = x*(620/4)+80+10*cos(0.0004f*SDL_GetTicks());
-        DestRect.y = y*(387/4)+70+4*sin(0.0004f*SDL_GetTicks());
-        DestRect.w = (620/4)-60+40*cos(0.0004f*SDL_GetTicks());
-        DestRect.h = (387/4)-40+10*sin(0.0004f*SDL_GetTicks());
-      }
-      else
-      { //give me some random location to draw this shit at
-        DestRect.x = xdist(mt);     //tell me where that shit's at on x
-        DestRect.y = ydist(mt);    //tell me where that shit's at on y
-        DestRect.w = wdist(mt);   //tell me how wide that shit is
-        DestRect.h = hdist(mt);  //tell me how tall that shit is
-      }
-
-      for(int i = 0; i < 4500; i++)
+      for(int y = 0; y < 4; y++)
       {
-        SDL_RenderDrawPoint(ren, sxdist(mt), sydist(mt));
-      }
+        SrcRect.x = x*(620/4);    //here's some math to get x
+        SrcRect.y = y*(387/4);   //here's some math to get y
+        SrcRect.w = (620/4);    //width is just distance between two samples
+        SrcRect.h = (387/4);   //similar situation for height
 
-      SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);  //copy from SrcRect to DestRect
-    }//end y
-  }//end x
+        if(aligned)
+        { //'shrunk in' version of the cat face - this was kind of trial and error
+          DestRect.x = x*(620/4)+80+10*cos(0.0004f*SDL_GetTicks());
+          DestRect.y = y*(387/4)+70+4*sin(0.0004f*SDL_GetTicks());
+          DestRect.w = (620/4)-60+40*cos(0.0004f*SDL_GetTicks());
+          DestRect.h = (387/4)-40+10*sin(0.0004f*SDL_GetTicks());
+        }
+        else
+        { //give me some random location to draw this shit at
+          DestRect.x = xdist(mt);     //tell me where that shit's at on x
+          DestRect.y = ydist(mt);    //tell me where that shit's at on y
+          DestRect.w = wdist(mt);   //tell me how wide that shit is
+          DestRect.h = hdist(mt);  //tell me how tall that shit is
+        }
 
-  SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
+        for(int i = 0; i < 4500; i++)
+        {
+          SDL_RenderDrawPoint(ren, sxdist(mt), sydist(mt));
+        }
 
-  if(!aligned)
-    SDL_Delay(1200); //wait some period of time so as not to cause as bad a seizure
+        SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);  //copy from SrcRect to DestRect
+      }//end y
+    }//end x
+
+    SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
+
+    if(!aligned)
+      SDL_Delay(1200); //wait some period of time so as not to cause as bad a seizure
+  }
 
 }
 
@@ -297,13 +323,26 @@ int main()
     my_game->ren  = SDL_CreateRenderer(my_game->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (my_game->ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    my_game->bmp = SDL_LoadBMP("grumpy-cat.bmp");
-    if (my_game->bmp == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    my_game->tex = SDL_CreateTextureFromSurface(my_game->ren, my_game->bmp);
-    SDL_FreeSurface(my_game->bmp);
+    SDL_Surface* bmp1 = NULL;
+    SDL_Surface* bmp2 = NULL;
+
+
+    bmp1 = SDL_LoadBMP("grumpy-cat.bmp");
+    if (bmp1 == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+
+    my_game->tex = SDL_CreateTextureFromSurface(my_game->ren, bmp1);
+    SDL_FreeSurface(bmp1);
     if (my_game->tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
+
+
+    bmp2 = SDL_LoadBMP("splash.bmp");
+    if (bmp2 == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+
+    my_game->splash = SDL_CreateTextureFromSurface(my_game->ren, bmp2);
+    SDL_FreeSurface(bmp2);
+    if (my_game->splash == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
     //The main loop -
       //this is what iterates per-frame in your game. You generally want to do your animation based on fixed time steps, so for now we'll
