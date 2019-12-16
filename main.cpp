@@ -107,6 +107,8 @@ void application::handle_keyboard_shit()
 
         if(e.key.repeat)
           cout << " and is being held ";
+
+        cout << " at time " << e.key.timestamp << endl << endl;
     }
     else if(e.type == SDL_KEYUP)
     {
@@ -122,11 +124,21 @@ void application::handle_keyboard_shit()
     {
       switch(e.button.button) //this is stupid
       {
+        case SDL_BUTTON_LEFT:
+          cout << "left click at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
 
+        case SDL_BUTTON_MIDDLE:
+          cout << "middle click at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
+
+        case SDL_BUTTON_RIGHT:
+          cout << "right click at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
       }
+      cout << " at time " << e.key.timestamp << endl << endl;
     }
 
-    cout << " at time " << e.key.timestamp << endl << endl;
   }
 }
 
