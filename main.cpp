@@ -113,6 +113,9 @@ int main()
 
                 default:
                 cout << " some other key pressed" << endl;
+                // printf("Physical %s key acting as %s key",
+                cout << "scancode is: " << SDL_GetScancodeName(e.key.keysym.scancode);
+                cout <<" with name: " <<  SDL_GetKeyName(e.key.keysym.sym) << endl;
                 break;
             }
         }
