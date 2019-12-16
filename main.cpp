@@ -151,7 +151,7 @@ void application::handle_keyboard_shit()
       //  ┌┬┐┌─┐┬ ┬┌─┐┌─┐  ┌─┐┬─┐┌─┐┌─┐┌─┐
       //  ││││ ││ │└─┐├┤   ├─┘├┬┘├┤ └─┐└─┐
       //  ┴ ┴└─┘└─┘└─┘└─┘  ┴  ┴└─└─┘└─┘└─┘
-      switch(e.button.button) //this is stupid notatoin
+      switch(e.button.button) //this is stupid notation
       {
         case SDL_BUTTON_LEFT:
           cout << "left click at x:" << e.button.x << " y:" << e.button.y << endl;
@@ -197,9 +197,13 @@ void application::draw_that_shit()
 
 
   //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
-  //rectangles tell SDL where you want to read from/write from
+  //rectangles tell SDL where you want to read from/write from -
+
+  //The implication here is that you have the opportunity to define where your pixels are going to show up on the screen, and what shape will they be.
+  //Squashing/stretching can be achieved by changing the shape of that rectangle - look at the random generation of widths/heights to see examples.
+
   SDL_Rect SrcRect; //where are we taking pixels from?
-  SDL_Rect DestRect;  //the pixels we took from SrcRect, where are they going to show up on the screen?
+  SDL_Rect DestRect;  //the pixels we took from SrcRect?
 
   //these random number generators give me some ability to randomly place the destination rectangles - you'll see
   std::random_device rd;
@@ -253,12 +257,10 @@ void application::draw_that_shit()
 //this is used for the instantiation in main
 application* main_application;
 
-
 int main()
 {
 
-    main_application = new application(); //so we have a new one
-
+    main_application = new application(); //so we have a new one - calls constructor and gets it ready to go
 
     //we went over all this yesterday, I made the error checking more compact but it's still distracting
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){ cerr << "SDL_Init Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
