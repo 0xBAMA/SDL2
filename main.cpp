@@ -42,6 +42,12 @@ application::application()
 {
   quit=false;
   aligned=false;
+
+  //null initialization of all sdl objects
+  win = NULL;
+  ren = NULL;
+  bmp = NULL;
+  tex = NULL;
 }
 
 
@@ -63,11 +69,18 @@ void application::handle_keyboard_shit()
     //User requests quit - this is through the x or keyboard shortcut
     if( e.type == SDL_QUIT )
     {
+      // ┌─┐┬ ┬┌─┐┌┬┐┌─┐┌┬┐  ┌─┐─┐ ┬┬┌┬┐
+      // └─┐└┬┘└─┐ │ ├┤ │││  ├┤ ┌┴┬┘│ │
+      // └─┘ ┴ └─┘ ┴ └─┘┴ ┴  └─┘┴ └─┴ ┴
+
         quit = true;
         cout << "quitting via kill" << endl;
     }
     else if( e.type == SDL_KEYDOWN )
     {
+      //  ┬┌─┌─┐┬ ┬  ┌─┐┬─┐┌─┐┌─┐┌─┐
+      //  ├┴┐├┤ └┬┘  ├─┘├┬┘├┤ └─┐└─┐
+      //  ┴ ┴└─┘ ┴   ┴  ┴└─└─┘└─┘└─┘
 
       //INFO:
       // https://wiki.libsdl.org/SDL_KeyboardEvent
@@ -112,6 +125,10 @@ void application::handle_keyboard_shit()
     }
     else if(e.type == SDL_KEYUP)
     {
+      //  ┬┌─┌─┐┬ ┬  ┬─┐┌─┐┬  ┌─┐┌─┐┌─┐┌─┐
+      //  ├┴┐├┤ └┬┘  ├┬┘├┤ │  ├┤ ├─┤└─┐├┤
+      //  ┴ ┴└─┘ ┴   ┴└─└─┘┴─┘└─┘┴ ┴└─┘└─┘
+
       switch( e.key.keysym.sym )
       {
         case SDLK_UP:
@@ -122,6 +139,9 @@ void application::handle_keyboard_shit()
     }
     else if(e.type == SDL_MOUSEBUTTONDOWN)
     {
+      //  ┌┬┐┌─┐┬ ┬┌─┐┌─┐  ┌─┐┬─┐┌─┐┌─┐┌─┐
+      //  ││││ ││ │└─┐├┤   ├─┘├┬┘├┤ └─┐└─┐
+      //  ┴ ┴└─┘└─┘└─┘└─┘  ┴  ┴└─└─┘└─┘└─┘
       switch(e.button.button) //this is stupid
       {
         case SDL_BUTTON_LEFT:
@@ -139,6 +159,9 @@ void application::handle_keyboard_shit()
     }
     else if(e.type == SDL_MOUSEBUTTONUP)
     {
+      //  ┌┬┐┌─┐┬ ┬┌─┐┌─┐  ┬─┐┌─┐┬  ┌─┐┌─┐┌─┐┌─┐
+      //  ││││ ││ │└─┐├┤   ├┬┘├┤ │  ├┤ ├─┤└─┐├┤
+      //  ┴ ┴└─┘└─┘└─┘└─┘  ┴└─└─┘┴─┘└─┘┴ ┴└─┘└─┘
       switch(e.button.button) //this is stupid
       {
         case SDL_BUTTON_LEFT:
@@ -227,19 +250,19 @@ int main()
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){ cerr << "SDL_Init Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
     main_application->win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 480, SDL_WINDOW_OPENGL);
-    if (main_application->win == nullptr){ cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    if (main_application->win == NULL){ cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
     // SDL_SetWindowFullscreen(main_application->win, SDL_WINDOW_FULLSCREEN);
 
     main_application->ren  = SDL_CreateRenderer(main_application->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (main_application->ren == nullptr){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
+    if (main_application->ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
 
     main_application->bmp = SDL_LoadBMP("grumpy-cat.bmp");
-    if (main_application->bmp == nullptr){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    if (main_application->bmp == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
     main_application->tex = SDL_CreateTextureFromSurface(main_application->ren, main_application->bmp);
     SDL_FreeSurface(main_application->bmp);
-    if (main_application->tex == nullptr){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    if (main_application->tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
 
 
