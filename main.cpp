@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include <iostream>
+#include <random>
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -79,6 +80,11 @@ int main()
         }
         else if( e.type == SDL_KEYDOWN )
         {
+
+          //INFO:
+          // https://wiki.libsdl.org/SDL_KeyboardEvent
+
+
             //switch based on key press
             switch( e.key.keysym.sym )
             {
@@ -118,7 +124,46 @@ int main()
       }
 
       SDL_RenderClear(ren);
-      SDL_RenderCopy(ren, tex, nullptr, nullptr);
+
+
+      //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
+
+
+      SDL_Rect SrcRect;
+      SDL_Rect DestRect;
+
+
+      std::random_device rd;
+      std::mt19937 mt(rd());
+      std::uniform_int_distribution<int> xdist(0,619);
+      std::uniform_int_distribution<int> ydist(0,387);
+      std::uniform_int_distribution<int> wdist(28,37);
+      std::uniform_int_distribution<int> hdist(25,38);
+
+
+      //image dimensions are 620,387
+
+      for(int x = 0; x < 4; x++)
+      {
+        for(int y = 0; y < 4; y++)
+        {
+          SrcRect.x = x*(620/4);
+          SrcRect.y = y*(387/4);
+          SrcRect.w = (620/4);
+          SrcRect.h = (387/4);
+
+          DestRect.x = xdist(mt);
+          DestRect.y = ydist(mt);
+          DestRect.w = wdist(mt);
+          DestRect.h = hdist(mt);
+
+          SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);
+        }
+      }
+
+
+
+
       SDL_RenderPresent(ren);
       SDL_Delay(100);
 
