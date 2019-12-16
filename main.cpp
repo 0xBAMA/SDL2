@@ -14,11 +14,11 @@ using std::endl;
   //presented you an interface like this, where you could access the main functions
   //really easily, would make it so you could do more of the logic of the game.
 
-class application
+class game
 {
 public:
-  application();
-  ~application();
+  game();
+  ~game();
 
   SDL_Window* win;
   SDL_Renderer* ren;
@@ -37,7 +37,7 @@ private:
 };
 
 
-application::application()
+game::game()
 {
   quit=false;     //you don't want to quit when you're instantiating
   aligned=false;  //default this to off
@@ -51,7 +51,7 @@ application::application()
 
 
 
-application::~application()
+game::~game()
 {//deallocation of all SDL stuff
   SDL_DestroyTexture(tex);
   SDL_DestroyRenderer(ren);
@@ -60,7 +60,7 @@ application::~application()
 }
 
 
-void application::handle_keyboard_shit()
+void game::handle_keyboard_shit()
 {
 
   //so SDL maintains a queue of events that take place, this includes mouse, keyboard, touch activity, as well as things like controllers
@@ -191,7 +191,7 @@ void application::handle_keyboard_shit()
 }
 
 
-void application::draw_that_shit()
+void game::draw_that_shit()
 {
   SDL_RenderClear(ren); //clear our background
 
@@ -215,6 +215,7 @@ void application::draw_that_shit()
   //image dimensions are 620,387
   //I'm going to chop that into a 4x4 grid
 
+
   for(int x = 0; x < 4; x++)
   {
     for(int y = 0; y < 4; y++)
@@ -226,10 +227,10 @@ void application::draw_that_shit()
 
       if(aligned)
       { //'shrunk in' version of the cat face - this was kind of trial and error
-        DestRect.x = x*(620/4)+80;
-        DestRect.y = y*(387/4)+70;
-        DestRect.w = (620/4)-60;
-        DestRect.h = (387/4)-40;
+        DestRect.x = x*(620/4)+80+15*cos(0.001*SDL_GetTicks());
+        DestRect.y = y*(387/4)+70+8*sin(0.001*SDL_GetTicks());
+        DestRect.w = (620/4)-60+15*cos(0.001*SDL_GetTicks());
+        DestRect.h = (387/4)-40+8*sin(0.001*SDL_GetTicks());
       }
       else
       { //give me some random location to draw this shit at
@@ -244,7 +245,7 @@ void application::draw_that_shit()
   }//end x
 
   SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
-  SDL_Delay(250); //wait some period of time so as not to cause as bad a seizure
+  // SDL_Delay(100); //wait some period of time so as not to cause as bad a seizure
 
 }
 
@@ -254,30 +255,30 @@ void application::draw_that_shit()
 
 
 //this is used for the instantiation in main
-application* main_application;
+game* my_game;
 
 int main()
 {
 
-    main_application = new application(); //so we have a new one - calls constructor and gets it ready to go
+    my_game = new game(); //so we have a new one - calls constructor and gets it ready to go
 
     //we went over all this yesterday, I made the error checking more compact but it's still distracting
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){ cerr << "SDL_Init Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    main_application->win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 480, SDL_WINDOW_OPENGL);
-    if (main_application->win == NULL){ cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    my_game->win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 480, SDL_WINDOW_OPENGL);
+    if (my_game->win == NULL){ cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    // SDL_SetWindowFullscreen(main_application->win, SDL_WINDOW_FULLSCREEN);
+    // SDL_SetWindowFullscreen(my_game->win, SDL_WINDOW_FULLSCREEN);
 
-    main_application->ren  = SDL_CreateRenderer(main_application->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (main_application->ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
+    my_game->ren  = SDL_CreateRenderer(my_game->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (my_game->ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    main_application->bmp = SDL_LoadBMP("grumpy-cat.bmp");
-    if (main_application->bmp == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    my_game->bmp = SDL_LoadBMP("grumpy-cat.bmp");
+    if (my_game->bmp == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    main_application->tex = SDL_CreateTextureFromSurface(main_application->ren, main_application->bmp);
-    SDL_FreeSurface(main_application->bmp);
-    if (main_application->tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    my_game->tex = SDL_CreateTextureFromSurface(my_game->ren, my_game->bmp);
+    SDL_FreeSurface(my_game->bmp);
+    if (my_game->tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
 
     //The main loop -
@@ -289,15 +290,15 @@ int main()
 
 
     //Main loop flags
-    main_application->quit = false;
+    my_game->quit = false;
 
-    while(!main_application->quit)  //main loop
+    while(!my_game->quit)  //main loop
     {
-      main_application->handle_keyboard_shit();
-      main_application->draw_that_shit();
+      my_game->handle_keyboard_shit();
+      my_game->draw_that_shit();
     }
 
-    delete main_application;  //this calls the destructor and deallocates all the SDL stuff - there's better ways to do this
+    delete my_game;  //this calls the destructor and deallocates all the SDL stuff - there's better ways to do this
 
     return EXIT_SUCCESS;
 }
