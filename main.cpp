@@ -120,6 +120,11 @@ void game::handle_keyboard_shit()
               quit = true;  //this will be seen in main
               break;
 
+            case SDLK_f:
+              cout << " going fullscreen" << endl;
+              SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
+              break;
+
             default:
               cout << " some other key pressed" << endl;
               cout << "scancode is: " << SDL_GetScancodeName(e.key.keysym.scancode);
@@ -193,18 +198,16 @@ void game::handle_keyboard_shit()
 
 void game::draw_that_shit()
 {
-  // SDL_RenderClear(ren); //clear our background
-
+  SDL_RenderClear(ren); //clear our background
   SDL_SetRenderDrawColor(ren,45,38,22,SDL_ALPHA_OPAQUE); //set the color you want to draw witk
 
-
-  // SDL_Rect fullscreen;
-  // fullscreen.x = 0;
-  // fullscreen.y = 0;
-  // fullscreen.w = 720;
-  // fullscreen.h = 480;
+  SDL_Rect fullscreen;
+  fullscreen.x = 0;
+  fullscreen.y = 0;
+  fullscreen.w = 720;
+  fullscreen.h = 480;
   //put a base layer of that color down
-  // SDL_RenderFillRect(ren, &fullscreen);
+  SDL_RenderFillRect(ren, &fullscreen);
 
   //set the new color to draw with
   SDL_SetRenderDrawColor(ren,45,45,45,SDL_ALPHA_OPAQUE); //set the color you want to draw with
@@ -221,15 +224,15 @@ void game::draw_that_shit()
   //these random number generators give me some ability to randomly place the destination rectangles - you'll see
   std::random_device rd;
   std::mt19937 mt(rd());
-  std::uniform_int_distribution<int> xdist(0,619);  //between zero and the width
-  std::uniform_int_distribution<int> ydist(0,387);  //between zero and the height
+  std::uniform_int_distribution<int> xdist(0,619);  //between zero and the width of the image
+  std::uniform_int_distribution<int> sxdist(0,720);  //between zero and the width of the screen
+  std::uniform_int_distribution<int> ydist(0,387);  //between zero and the height of the image
+  std::uniform_int_distribution<int> sydist(0,480);  //between zero and the height of the screen
   std::uniform_int_distribution<int> wdist(16,128);  //some range of values
   std::uniform_int_distribution<int> hdist(25,175);  //some range of values
 
   //image dimensions are 620,387
   //I'm going to chop that into a 4x4 grid
-
-
 
 
   for(int x = 0; x < 4; x++)
@@ -256,9 +259,9 @@ void game::draw_that_shit()
         DestRect.h = hdist(mt);  //tell me how tall that shit is
       }
 
-      for(int i = 0; i < 45; i++)
+      for(int i = 0; i < 4500; i++)
       {
-        SDL_RenderDrawPoint(ren, xdist(mt), ydist(mt));
+        SDL_RenderDrawPoint(ren, sxdist(mt), sydist(mt));
       }
 
       SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);  //copy from SrcRect to DestRect
@@ -288,10 +291,8 @@ int main()
     //we went over all this yesterday, I made the error checking more compact but it's still distracting
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){ cerr << "SDL_Init Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
-    my_game->win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 480, SDL_WINDOW_OPENGL);
+    my_game->win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 405, SDL_WINDOW_OPENGL);
     if (my_game->win == NULL){ cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
-
-    // SDL_SetWindowFullscreen(my_game->win, SDL_WINDOW_FULLSCREEN);
 
     my_game->ren  = SDL_CreateRenderer(my_game->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (my_game->ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
