@@ -23,7 +23,7 @@ public:
   SDL_Texture* tex;
 
   void handle_keyboard_shit();
-  void draw_that_shit(bool is_aligned);
+  void draw_that_shit();
 
 
   //Event handler
@@ -159,7 +159,7 @@ void application::handle_keyboard_shit()
 }
 
 
-void application::draw_that_shit(bool is_aligned)
+void application::draw_that_shit()
 {
   SDL_RenderClear(ren);
 
@@ -186,7 +186,7 @@ void application::draw_that_shit(bool is_aligned)
       SrcRect.w = (620/4);
       SrcRect.h = (387/4);
 
-      if(is_aligned)
+      if(aligned)
       {
         DestRect.x = x*(620/4)+80;
         DestRect.y = y*(387/4)+70;
@@ -249,7 +249,7 @@ int main()
     while(!main_application->quit)  //main loop
     {
       main_application->handle_keyboard_shit();
-      main_application->draw_that_shit(main_application->aligned);
+      main_application->draw_that_shit();
     }
 
     delete main_application;
