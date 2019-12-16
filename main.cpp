@@ -136,9 +136,25 @@ void application::handle_keyboard_shit()
           cout << "right click at x:" << e.button.x << " y:" << e.button.y << endl;
           break;
       }
-      cout << " at time " << e.key.timestamp << endl << endl;
     }
+    else if(e.type == SDL_MOUSEBUTTONUP)
+    {
+      switch(e.button.button) //this is stupid
+      {
+        case SDL_BUTTON_LEFT:
+          cout << "left click released at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
 
+        case SDL_BUTTON_MIDDLE:
+          cout << "middle click released at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
+
+        case SDL_BUTTON_RIGHT:
+          cout << "right click released at x:" << e.button.x << " y:" << e.button.y << endl;
+          break;
+        }
+      }
+    cout << " at time " << e.key.timestamp << endl << endl;
   }
 }
 
