@@ -1,6 +1,7 @@
 CXX?=c++
 SDL2FLAGS=$(shell pkg-config sdl2 --cflags --libs)
 CXXFLAGS?=-std=c++11 -Wall -pedantic -Werror -Wshadow -Wstrict-aliasing -Wstrict-overflow
+INCLUDE_SDL_TTF=-I /usr/local/lib
 
 .PHONY: all msg clean fullclean
 
@@ -9,21 +10,12 @@ all: msg main
 msg:
 	@echo '--- C++11 ---'
 
+
+# -lSDL2_image -lSDL2_ttf
+
 main: main.cpp
-	${CXX} ${CXXFLAGS} -O3 -lSDL2 -lSDL2_ttf -o $@ $< ${SDL2FLAGS}
+	${CXX} ${CXXFLAGS} -O3 -lSDL2  -o $@ $< ${SDL2FLAGS}
 
-# small: main.cpp
-# 	${CXX} ${CXXFLAGS} -Os -o main $< ${SDL2FLAGS}
-# 	-strip main
-# 	-sstrip main
-
-# debug: main.cpp
-# 	${CXX} ${CXXFLAGS} -O0 -g -o main $< ${SDL2FLAGS}
-#
-# asm: main.asm
-#
-# main.asm: main.cpp
-# 	${CXX} ${CFLAGS} -S -o main.asm $< ${SDL2FLAGS}
 
 run: msg main
 	time ./main
