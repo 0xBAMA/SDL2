@@ -52,15 +52,6 @@ int main()
 
 
 
-    // for (int i = 0; i < 20; i++)
-    // {
-    //     SDL_RenderClear(ren);
-    //     SDL_RenderCopy(ren, tex, nullptr, nullptr);
-    //     SDL_RenderPresent(ren);
-    //     SDL_Delay(100);
-    // }
-
-
 
 
 
@@ -80,43 +71,43 @@ int main()
       //Handle events on queue
       while( SDL_PollEvent( &e ) != 0 )
       {
-        //User requests quit
+        //User requests quit - this is through the x or keyboard shortcut
         if( e.type == SDL_QUIT )
         {
             quit = true;
+            cout << "quitting via kill" << endl;
         }
         else if( e.type == SDL_KEYDOWN )
         {
-            //Select surfaces based on key press
+            //switch based on key press
             switch( e.key.keysym.sym )
             {
                 case SDLK_UP:
-                cout << "  up  key pressed" << endl;
-                break;
+                  cout << "  up  key pressed" << endl;
+                  break;
 
                 case SDLK_DOWN:
-                cout << "  down  key pressed" << endl;
-                break;
+                  cout << "  down  key pressed" << endl;
+                  break;
 
                 case SDLK_LEFT:
-                cout << "  left  key pressed" << endl;
-                break;
+                  cout << "  left  key pressed" << endl;
+                  break;
 
                 case SDLK_RIGHT:
-                cout << "  right  key pressed" << endl;
-                break;
+                  cout << "  right  key pressed" << endl;
+                  break;
 
                 case SDLK_ESCAPE:
-                cout << " exiting" << endl;
+                  cout << " exiting (quitting via escape)" << endl;
                 quit = true;
-                break;
+                  break;
 
                 default:
-                cout << " some other key pressed" << endl;
-                // printf("Physical %s key acting as %s key",
-                cout << "scancode is: " << SDL_GetScancodeName(e.key.keysym.scancode);
-                cout <<" with name: " <<  SDL_GetKeyName(e.key.keysym.sym) << endl;
-                break;
+                  cout << " some other key pressed" << endl;
+                  cout << "scancode is: " << SDL_GetScancodeName(e.key.keysym.scancode);
+                  cout <<" with name: " <<  SDL_GetKeyName(e.key.keysym.sym) << endl;
+                  break;
             }
         }
       }
@@ -127,13 +118,6 @@ int main()
       SDL_Delay(100);
 
     }
-
-
-
-
-
-
-
 
     SDL_DestroyTexture(tex);
     SDL_DestroyRenderer(ren);
