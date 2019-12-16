@@ -8,7 +8,7 @@ INCLUDE_SDL_TTF=-I /usr/local/lib
 all: msg main
 
 msg:
-	@echo '--- C++11 ---'
+	@echo 'Compiling'
 
 
 # -lSDL2_image -lSDL2_ttf

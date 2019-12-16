@@ -193,7 +193,21 @@ void game::handle_keyboard_shit()
 
 void game::draw_that_shit()
 {
-  SDL_RenderClear(ren); //clear our background
+  // SDL_RenderClear(ren); //clear our background
+
+  SDL_SetRenderDrawColor(ren,45,38,22,SDL_ALPHA_OPAQUE); //set the color you want to draw witk
+
+
+  // SDL_Rect fullscreen;
+  // fullscreen.x = 0;
+  // fullscreen.y = 0;
+  // fullscreen.w = 720;
+  // fullscreen.h = 480;
+  //put a base layer of that color down
+  // SDL_RenderFillRect(ren, &fullscreen);
+
+  //set the new color to draw with
+  SDL_SetRenderDrawColor(ren,45,45,45,SDL_ALPHA_OPAQUE); //set the color you want to draw with
 
   //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
   //rectangles tell SDL where you want to read from/write from -
@@ -216,6 +230,8 @@ void game::draw_that_shit()
   //I'm going to chop that into a 4x4 grid
 
 
+
+
   for(int x = 0; x < 4; x++)
   {
     for(int y = 0; y < 4; y++)
@@ -227,10 +243,10 @@ void game::draw_that_shit()
 
       if(aligned)
       { //'shrunk in' version of the cat face - this was kind of trial and error
-        DestRect.x = x*(620/4)+80+15*cos(0.001*SDL_GetTicks());
-        DestRect.y = y*(387/4)+70+8*sin(0.001*SDL_GetTicks());
-        DestRect.w = (620/4)-60+15*cos(0.001*SDL_GetTicks());
-        DestRect.h = (387/4)-40+8*sin(0.001*SDL_GetTicks());
+        DestRect.x = x*(620/4)+80+10*cos(0.0004f*SDL_GetTicks());
+        DestRect.y = y*(387/4)+70+4*sin(0.0004f*SDL_GetTicks());
+        DestRect.w = (620/4)-60+40*cos(0.0004f*SDL_GetTicks());
+        DestRect.h = (387/4)-40+10*sin(0.0004f*SDL_GetTicks());
       }
       else
       { //give me some random location to draw this shit at
@@ -240,12 +256,19 @@ void game::draw_that_shit()
         DestRect.h = hdist(mt);  //tell me how tall that shit is
       }
 
+      for(int i = 0; i < 45; i++)
+      {
+        SDL_RenderDrawPoint(ren, xdist(mt), ydist(mt));
+      }
+
       SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);  //copy from SrcRect to DestRect
     }//end y
   }//end x
 
   SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
-  // SDL_Delay(100); //wait some period of time so as not to cause as bad a seizure
+
+  if(!aligned)
+    SDL_Delay(1200); //wait some period of time so as not to cause as bad a seizure
 
 }
 
