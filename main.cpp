@@ -110,6 +110,11 @@ int main()
                   break;
             }
         }
+
+        if(e.key.repeat)
+          cout << " held for " << (int)e.key.repeat;
+
+        cout << " at time " << e.key.timestamp << endl << endl;
       }
 
       SDL_RenderClear(ren);
