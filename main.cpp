@@ -28,8 +28,8 @@ public:
   void handle_keyboard_shit();
   void draw_that_shit();
 
-  bool quit;
-  bool aligned;
+  bool quit;      //used in main loop, to tell if you want to quit or not
+  bool aligned;   //are we going to draw aligned chunks of grumpy cat
 
 private:
 
@@ -39,8 +39,8 @@ private:
 
 application::application()
 {
-  quit=false;
-  aligned=false;
+  quit=false;     //you don't want to quit when you're instantiating
+  aligned=false;  //default this to off
 
   //null initialization of all sdl objects - they're all created in main()
   win = NULL;
@@ -83,8 +83,8 @@ void application::handle_keyboard_shit()
       // └─┐└┬┘└─┐ │ ├┤ │││  ├┤ ┌┴┬┘│ │
       // └─┘ ┴ └─┘ ┴ └─┘┴ ┴  └─┘┴ └─┴ ┴
 
-        quit = true;
         cout << "quitting via kill" << endl;  //this is called when exiting via key combo/window x button
+        quit = true;  //this will be seen from main
     }
     else if( e.type == SDL_KEYDOWN )
     {// this type means you pressed a key
@@ -117,7 +117,7 @@ void application::handle_keyboard_shit()
 
             case SDLK_ESCAPE:
               cout << " exiting (quitting via escape)" << endl;   // this is called when the escape button is hit
-            quit = true;
+              quit = true;  //this will be seen in main
               break;
 
             default:
@@ -184,8 +184,8 @@ void application::handle_keyboard_shit()
         case SDL_BUTTON_RIGHT:
           cout << "right click released at x:" << e.button.x << " y:" << e.button.y << endl;
           break;
-        }
       }
+    }
     cout << " at time " << e.key.timestamp << endl << endl;
   }
 }
@@ -194,7 +194,6 @@ void application::handle_keyboard_shit()
 void application::draw_that_shit()
 {
   SDL_RenderClear(ren); //clear our background
-
 
   //learning how to chop up images with https://wiki.libsdl.org/SDL_RenderCopy
   //rectangles tell SDL where you want to read from/write from -
@@ -210,8 +209,8 @@ void application::draw_that_shit()
   std::mt19937 mt(rd());
   std::uniform_int_distribution<int> xdist(0,619);  //between zero and the width
   std::uniform_int_distribution<int> ydist(0,387);  //between zero and the height
-  std::uniform_int_distribution<int> wdist(16,64);  //some range of values
-  std::uniform_int_distribution<int> hdist(25,50);  //some range of values
+  std::uniform_int_distribution<int> wdist(16,128);  //some range of values
+  std::uniform_int_distribution<int> hdist(25,175);  //some range of values
 
   //image dimensions are 620,387
   //I'm going to chop that into a 4x4 grid
@@ -245,7 +244,7 @@ void application::draw_that_shit()
   }//end x
 
   SDL_RenderPresent(ren); //swap buffers so that this most recently drawn material is shown to the user
-  SDL_Delay(100); //wait some period of time so as not to cause as bad a seizure
+  SDL_Delay(250); //wait some period of time so as not to cause as bad a seizure
 
 }
 
