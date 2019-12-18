@@ -1,8 +1,6 @@
 #include "game.h"
 
 
-
-
 //this is used for the instantiation in main
 game* my_game;
 
@@ -33,7 +31,6 @@ int main()
     if (my_game->tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
 
-
     bmp2 = SDL_LoadBMP("splash.bmp");
     if (bmp2 == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
 
@@ -43,7 +40,7 @@ int main()
 
     //The main loop -
       //this is what iterates per-frame in your game. You generally want to do your animation based on fixed time steps, so for now we'll
-      //just kind of not not worry about that. There's functionality for timers but we'll get there
+      //just kind of not not worry about that.
 
       //Basically the main loop just runs until the user has told us that they want to quit - until that time, we'll continue to
       //loop through this process of handling the shit for the keyboard, then drawing the shit that we do in the draw function

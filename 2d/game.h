@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h> //we're just using the base SDL2 libraries - not going to get into the extensions right now
+#include <SDL_opengl.h>
 #include <cstdlib>
 #include <iostream>
 #include <random>
@@ -295,5 +296,4 @@ void game::draw_that_shit()
     if(!aligned)
       SDL_Delay(1200); //wait some period of time so as not to cause as bad a seizure
   }
-
 }
