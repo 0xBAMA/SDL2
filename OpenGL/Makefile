@@ -12,10 +12,11 @@ msg:
 	@echo 'Compiling'
 
 
-# -lSDL2_image -lSDL2_ttf
+### -lSDL2_image -lSDL2_ttf
 
 main: main.cc
 	${CXX} ${CXXFLAGS} ${GL_FLAGS} -O3 -lSDL2  -o $@ $< ${SDL2FLAGS}
+	### ${CXX} ${CXXFLAGS} main.cc `sdl2-config --libs --cflags` -lGL -Wall
 
 
 run: msg main
