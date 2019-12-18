@@ -16,6 +16,11 @@
 #include <SDL_opengl.h>
 
 #include <stdio.h>
+#include <iostream>
+
+using std::cout;
+using std::cerr;
+using std::endl;
 
 typedef float t_mat4x4[16];
 
@@ -163,6 +168,34 @@ int main( int argc, char * argv[] )
     mat4x4_ortho( projection_matrix, 0.0f, (float)width, (float)height, 0.0f, 0.0f, 100.0f );
     glUniformMatrix4fv( glGetUniformLocation( program, "u_projection_matrix" ), 1, GL_FALSE, projection_matrix );
 
+
+
+
+    //can we do images on top of OpenGL?  - looking like not really (12/18)
+
+    // SDL_Renderer * ren  = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    // if (ren == NULL){ cerr << "SDL_CreateRenderer Error" << SDL_GetError() << endl; return EXIT_FAILURE; }
+    //
+    // SDL_Surface * bmp = SDL_LoadBMP("../2d/grumpy-cat.bmp");
+    // if (bmp == NULL){ cerr << "SDL_LoadBMP Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+    //
+    // SDL_Texture * tex = SDL_CreateTextureFromSurface(ren, bmp);
+    // if (tex == NULL){ cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << endl; return EXIT_FAILURE; }
+
+
+    // SDL_FreeSurface(bmp);
+    //
+    // SDL_Rect SrcRect; //where are we taking pixels from?
+    // SDL_Rect DestRect;  //the pixels we took from SrcRect?
+    //
+    // DestRect.x = SrcRect.x = 0;
+    // DestRect.y = SrcRect.y = 0;
+    // DestRect.w = SrcRect.w = 620;
+    // DestRect.h = SrcRect.h = 387;
+
+
+
+
     for( ;; ) //same as while(true){}
     {
         glClear( GL_COLOR_BUFFER_BIT );
@@ -181,6 +214,9 @@ int main( int argc, char * argv[] )
 
         glBindVertexArray( vao );
         glDrawArrays( GL_TRIANGLES, 0, 6 );
+
+        // SDL_RenderCopy(ren, tex, &SrcRect, &DestRect);
+        // SDL_RenderPresent(ren);
 
         SDL_GL_SwapWindow( window );
         SDL_Delay( 100 );
