@@ -47,7 +47,7 @@ static inline void mat4x4_ortho( t_mat4x4 out, float left, float right, float bo
 }
 
 static const char * vertex_shader =
-    "#version 130\n"
+    "#version 450\n"
     "in vec2 i_position;\n"
     "in vec4 i_color;\n"
     "out vec4 v_color;\n"
@@ -58,7 +58,7 @@ static const char * vertex_shader =
     "}\n";
 
 static const char * fragment_shader =
-    "#version 130\n"
+    "#version 450\n"
     "in vec4 v_color;\n"
     "out vec4 o_color;\n"
     "void main() {\n"
@@ -81,14 +81,14 @@ int main( int argc, char * argv[] )
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
     SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
 
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
-    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 2 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 5 );
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
 
     static const int width = 800;
     static const int height = 600;
 
-    SDL_Window * window = SDL_CreateWindow( "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+    SDL_Window * window = SDL_CreateWindow( "OpenGL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     SDL_GLContext context = SDL_GL_CreateContext( window );
 
     GLuint vs, fs, program;
